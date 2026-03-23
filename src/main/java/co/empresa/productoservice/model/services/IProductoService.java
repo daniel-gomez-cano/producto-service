@@ -2,6 +2,10 @@ package co.empresa.productoservice.model.services;
 
 import co.empresa.productoservice.model.entities.Producto;
 import java.util.List;
+import org.springframework.http.ResponseEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 
 /**
  * Interface que define los métodos que se pueden realizar sobre la entidad Producto
@@ -11,5 +15,6 @@ public interface IProductoService {
     void delete(Producto producto);
     Producto findById(Long id);
     Producto update(Producto producto);
-    List<Producto> findAll();
+    //List<Producto> findAll();
+    Page<Producto> findAll(Pageable pageable);
 }
