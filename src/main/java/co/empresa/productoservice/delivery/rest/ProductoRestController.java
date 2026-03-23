@@ -1,5 +1,7 @@
 package co.empresa.productoservice.delivery.rest;
 
+import co.empresa.productoservice.domain.exception.ProductoNoEncontradoException;
+import co.empresa.productoservice.domain.exception.ValidationException;
 import co.empresa.productoservice.domain.model.Producto;
 import co.empresa.productoservice.domain.service.IProductoService;
 import org.springframework.http.HttpStatus;
@@ -38,18 +40,18 @@ public class ProductoRestController {
     }
 
     @PostMapping("/productos")
-    public ResponseEntity<Map<String, Object>> save(@Valid @RequestBody Producto producto, BindingResult result) {
+    public ResponseEntity<Map<String,Object>> save(
+            @Valid @RequestBody Producto producto,
+            BindingResult result) {
+
         if (result.hasErrors()) {
-            Map<String, Object> response = new HashMap<>();
-            response.put("error", "Error de validación");
-            response.put("errores", result.getFieldErrors());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+            throw new ValidationException(result); // lo captura el Advice
         }
-            Producto nuevo = productoService.save(producto);
-            Map<String, Object> resp = new HashMap<>();
-            resp.put(MENSAJE, "Creado con éxito");
-            resp.put(PRODUCTO, nuevo);
-            return ResponseEntity.status(HttpStatus.CREATED).body(resp);
+        var creado = productoService.save(producto);
+        var resp = new HashMap<String,Object>();
+        resp.put("mensaje", "El producto ha sido creado con éxito!");
+        resp.put("producto", creado);
+        return ResponseEntity.status(HttpStatus.CREATED).body(resp);
     }
 
     @PutMapping("/productos/{id}")
@@ -88,14 +90,9 @@ public class ProductoRestController {
     }
 
     @GetMapping("/productos/{id}")
-    public ResponseEntity<Map<String, Object>> findById(@PathVariable Long id) {
-        Map<String, Object> resp = new HashMap<>();
-        Producto p = productoService.findById(id);
-        if (p == null) {
-            resp.put(MENSAJE, "Producto no encontrado");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(resp);
-        }
-        resp.put(PRODUCTO, p);
-        return ResponseEntity.ok(resp);
+    public ResponseEntity<Map<String,Object>> findById(@PathVariable Long id){
+        var p = productoService.findById(id);
+        if (p == null) throw new ProductoNoEncontradoException(id);
+        return ResponseEntity.ok(Map.of("producto", p));
     }
 }
