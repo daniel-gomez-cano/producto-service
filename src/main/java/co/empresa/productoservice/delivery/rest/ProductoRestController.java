@@ -1,7 +1,7 @@
-package co.empresa.productoservice.controllers;
+package co.empresa.productoservice.delivery.rest;
 
-import co.empresa.productoservice.model.entities.Producto;
-import co.empresa.productoservice.model.services.IProductoService;
+import co.empresa.productoservice.domain.model.Producto;
+import co.empresa.productoservice.domain.service.IProductoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;

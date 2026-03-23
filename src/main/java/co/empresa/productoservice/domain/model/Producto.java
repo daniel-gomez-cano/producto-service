@@ -1,10 +1,7 @@
-package co.empresa.productoservice.model.entities;
+package co.empresa.productoservice.domain.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-
-import lombok.Getter;
-import lombok.Setter;
 
 @Entity
 
@@ -24,6 +21,17 @@ public class Producto {
     @NotNull(message = "El precio es obligatorio")
     @Positive(message = "El precio debe ser mayor que 0")
     private Double precio;
+
+    @NotNull(message = "El stock no puede ser nulo")
+    @Min(value = 0, message = "El stock no puede ser negativo")
+    private Integer stock;
+
+    @Size(max = 100, message = "El nombre del archivo no puede exceder los 100 caracteres")
+    @Pattern(
+            regexp = "^[\\w,\\s-]+\\.(jpg|jpeg|png|gif|bmp|webp)$",
+            message = "El nombre del archivo debe ser válido y tener una extensión permitida"
+    )
+    private String foto;
 
     public Long getId() {
         return id;
@@ -51,5 +59,21 @@ public class Producto {
 
     public void setPrecio(Double precio) {
         this.precio = precio;
+    }
+
+    public void setStock(Integer stock) {
+        this.stock = stock;
+    }
+
+    public Integer getStock() {
+        return stock;
+    }
+
+    public void setFoto(String foto) {
+        this.foto = foto;
+    }
+
+    public String getFoto() {
+        return foto;
     }
 }
