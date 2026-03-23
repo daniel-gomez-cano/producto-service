@@ -15,6 +15,6 @@ public interface IProductoService {
     void delete(Producto producto);
     Producto findById(Long id);
     Producto update(Producto producto);
-    //List<Producto> findAll();
+    List<Producto> findAll();
     Page<Producto> findAll(Pageable pageable);
 }

@@ -48,4 +48,9 @@ public class ProductoServiceImpl implements IProductoService {
         return productoRepository.findAll(pageable);
     }
 
+    @Override
+    public List<Producto> findAll() {
+        return (List<Producto>) productoRepository.findAll();
+    }
+
 }
